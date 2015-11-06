@@ -45,7 +45,7 @@ class Stack t where
 -- Data type using built-in Haskell list type.
 data List a = List [a] deriving Show
 
--- and it implementation of Stack
+-- and its implementation of Stack
 instance Stack List where
   empty = List []
   isEmpty (List xs) = null xs
@@ -56,7 +56,7 @@ instance Stack List where
 -- More "raw" data type using tuples.
 data CustomList a = Nil | Cons (a, CustomList a) deriving Show
 
--- and it implementation of Stack
+-- and its implementation of Stack
 instance Stack CustomList where
   empty = Nil
 
