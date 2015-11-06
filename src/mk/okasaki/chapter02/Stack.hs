@@ -24,6 +24,24 @@ class Stack t where
   xs +++ ys = if isEmpty xs then ys
                             else cons (headS xs) (tailS xs +++ ys)
 
+  --
+  -- Exercise 2.1
+  --
+  -- Rather concise implementation, showing expressiveness of Haskell, taking
+  -- into account that it is generic, using only available functions of this
+  -- type class.
+  --
+  -- Using built-in type implementation would be trivial, like:
+  --
+  --   suffixes :: [a] -> [[a]]
+  --   suffixes [] = [[]]
+  --   suffixes xs@(_:ys) = xs:suffixes ys
+  --
+  suffixes :: t a -> t (t a)
+  suffixes xs = if isEmpty xs then empty
+                              else cons xs (suffixes $ tailS xs)
+
+
 -- Data type using built-in Haskell list type.
 data List a = List [a] deriving Show
 
@@ -60,7 +78,8 @@ main = do
   mainCustomList
 
 -- Generic tester for Stack type class
-mainStack :: (Stack s, Show (s a), Show a) => s a -> s a -> s a -> IO ()
+-- TODO: obviously I'm doing something wrong with 'Show' constraints
+mainStack :: (Stack s, Show (s (s a)), Show (s a), Show a) => s a -> s a -> s a -> IO ()
 mainStack emptyL xs ys = do
   putStrLn $ "isEmpty empty: " ++ show (isEmpty emptyL)
   putStrLn $ "isEmpty xs: " ++ show (isEmpty xs)
@@ -68,6 +87,7 @@ mainStack emptyL xs ys = do
   putStrLn $ "tailS xs: " ++ show (tailS xs)
   putStrLn $ "empty +++ xs: " ++ show (emptyL +++ xs)
   putStrLn $ "xs +++ ys   : " ++ show (xs +++ ys)
+  putStrLn $ "suffixes xs : " ++ show (suffixes xs)
 
 -- Tester for List data type
 mainList :: IO ()
